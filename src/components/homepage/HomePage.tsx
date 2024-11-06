@@ -1,13 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import './HomePage.css';
 import envelopeImage from '../../images/Envelop.png';
 import personWithShield from '../../images/person_with_shield.png'
 import shield from '../../images/shield.png';
 
 const HomePage: React.FC = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const hasSession = document.cookie.includes("session");
+        if (hasSession) {
+            navigate("/inbox");
+        }
+    }, [navigate]);
+
     return (
-        // todo: я хочу, чтобы здесь типа если есть session-cookie, то открывался /inbox путь с соответствующим компонентом
         <div className="home-container">
             <header className="header">
                 <div className="logo">
