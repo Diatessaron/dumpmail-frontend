@@ -53,10 +53,6 @@ body {
     margin-bottom: 20px;
 }
 
-.header h2 {
-    font-size: 24px;
-}
-
 .refresh-btn {
     padding: 8px 16px;
     font-size: 14px;
@@ -101,15 +97,15 @@ body {
 }
 
 .view-btn, .delete-btn {
-    padding: 0; /* Remove extra padding */
-    border: none; /* Remove border if not needed */
-    background-color: transparent; /* Transparent background to remove button styling */
+    padding: 0;
+    border: none;
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px; /* Set a fixed size for buttons */
-    height: 40px; /* Set a fixed size for buttons */
-    border-radius: 8px; /* Optional: add rounding if desired */
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
 }
 
 .view-btn:hover, .delete-btn:hover {
@@ -122,6 +118,31 @@ body {
     font-size: 14px;
     color: #007bff;
     text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .main {
+        padding: 10px;
+    }
+
+    .header h2 {
+        font-size: 20px;
+    }
+
+    .email-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 .nav-link:hover {
@@ -145,4 +166,22 @@ body {
 .btn-icon {
     width: 20px;
     height: 20px;
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        padding: 10px;
+    }
+
+    .folders h3, .filters h3 {
+        font-size: 16px;
+    }
+
+    .header h2 {
+        font-size: 18px;
+    }
+
+    .email-item {
+        padding: 10px;
+    }
 }

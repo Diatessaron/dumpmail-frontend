@@ -69,12 +69,6 @@ body {
     max-width: 600px;
 }
 
-.privacy-message p {
-    color: #666;
-    font-size: 16px;
-    margin-top: 8px;
-}
-
 .create-email-btn {
     padding: 12px 24px;
     font-size: 16px;
@@ -98,29 +92,6 @@ body {
     color: #666;
 }
 
-.nav-link {
-    display: inline-block;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #007bff;
-    text-decoration: none;
-}
-
-.nav-link:hover {
-    text-decoration: underline;
-}
-
-.envelope-icon {
-    width: 300px;
-    height: auto;
-    margin-bottom: 20px;
-}
-
-.envelope-icon img {
-    width: 100%;
-    height: auto;
-}
-
 .icon-container {
     display: flex;
     align-items: center;
@@ -136,6 +107,62 @@ body {
     margin-right: 10px;
 }
 
-.icon-text {
-    font-size: 24px;
+@media (max-width: 768px) {
+    .header {
+        padding: 10px 20px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .privacy-message {
+        padding: 15px 30px;
+        width: 90%;
+    }
+
+    .create-email-btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    .main-content {
+        padding: 20px 10px;
+    }
+
+    .envelope-icon img {
+        width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .logo-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .privacy-message {
+        padding: 10px 20px;
+        width: 100%;
+    }
+
+    .create-email-btn {
+        width: 100%;
+    }
+
+    .icon-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .icon {
+        width: 70px;
+        height: 70px;
+    }
 }
