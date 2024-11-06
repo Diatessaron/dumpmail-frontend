@@ -35,12 +35,48 @@ const Inbox: React.FC = () => {
                     <EmailComponent/>
                     <button className="refresh-btn">Refresh</button>
                 </div>
-                <div className="email-list">
-                    <EmailItem name="Alice Johnson" subject="Meeting Schedule"/>
-                    <EmailItem name="Bob Smith" subject="Project Update"/>
-                    <EmailItem name="Catherine Lee" subject="Invoice for Services"/>
-                </div>
+                <div className="email-list"><EmailList/></div>
             </main>
+        </div>
+    );
+};
+
+const EmailList: React.FC = () => {
+    const [emails, setEmails] = useState<EmailItemProps[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchEmails = async () => {
+            try {
+                const response = await fetch(`${backendUrl}/api/email/all?email=${}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch emails');
+                }
+                const data: EmailItemProps[] = await response.json();
+                setEmails(data);
+            } catch (error: any) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEmails();
+    }, []);
+
+    if (loading) return <div>Loading emails...</div>;
+    if (error) return <div>Error: {error}</div>;
+
+    return (
+        <div className="email-list">
+            {emails.length > 0 ? (
+                emails.map((email, index) => (
+                    <EmailItem key={index} name={email.name} subject={email.subject}/>
+                ))
+            ) : (
+                <div>Don't be shy, receive an email</div>
+            )}
         </div>
     );
 };
@@ -99,6 +135,6 @@ async function fetchEmailData() {
     } catch (error) {
         console.error("Failed to fetch email data:", error);
     }
-};
+}
 
 export default Inbox;
