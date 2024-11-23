@@ -1,17 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Inbox.css';
 import shield from "../../images/shield.png";
-import {backendUrl} from "../../utils/config";
+import { backendUrl } from "../../utils/config";
 
 const Inbox: React.FC = () => {
+    const [email, setEmail] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchAndSetEmail = async () => {
+            const fetchedEmail = (await fetchEmailData())?.email;
+            setEmail(fetchedEmail);
+        };
+        fetchAndSetEmail();
+    }, []);
+
     return (
         <div className="container">
             <aside className="sidebar">
-                    <Link to="/" className="logo">
-                        <div className="logo-icon"> {<img src={shield} alt="Shield"/>} </div>
-                        <span className="logo-text">SafeMail</span>
-                    </Link>
+                <Link to="/" className="logo">
+                    <div className="logo-icon"> {<img src={shield} alt="Shield" />} </div>
+                    <span className="logo-text">SafeMail</span>
+                </Link>
                 <Link to="/" className="nav-link">Back to Home</Link>
                 <div className="folders">
                     <h3>Folders</h3>
@@ -32,24 +42,28 @@ const Inbox: React.FC = () => {
             <main className="main">
                 <div className="header">
                     <h2>Inbox</h2>
-                    <EmailComponent/>
+                    <EmailComponent email={email} />
                     <button className="refresh-btn">Refresh</button>
                 </div>
-                <div className="email-list"><EmailList/></div>
+                <div className="email-list">
+                    <EmailList email={email} />
+                </div>
             </main>
         </div>
     );
 };
 
-const EmailList: React.FC = () => {
+const EmailList: React.FC<{ email: string | null }> = ({ email }) => {
     const [emails, setEmails] = useState<EmailItemProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!email) return; // Don't fetch if email is null
+
         const fetchEmails = async () => {
             try {
-                const response = await fetch(`${backendUrl}/api/email/all?email=${}`);
+                const response = await fetch(`${backendUrl}/api/email/all?email=${email}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch emails');
                 }
@@ -63,7 +77,7 @@ const EmailList: React.FC = () => {
         };
 
         fetchEmails();
-    }, []);
+    }, [email]);
 
     if (loading) return <div>Loading emails...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -72,7 +86,7 @@ const EmailList: React.FC = () => {
         <div className="email-list">
             {emails.length > 0 ? (
                 emails.map((email, index) => (
-                    <EmailItem key={index} name={email.name} subject={email.subject}/>
+                    <EmailItem key={index} from={email.from} subject={email.subject} />
                 ))
             ) : (
                 <div>Don't be shy, receive an email</div>
@@ -82,39 +96,28 @@ const EmailList: React.FC = () => {
 };
 
 interface EmailItemProps {
-    name: string;
+    from: string;
     subject: string;
 }
 
-const EmailItem: React.FC<EmailItemProps> = ({name, subject}) => {
+const EmailItem: React.FC<EmailItemProps> = ({ from, subject }) => {
     return (
         <div className="email-item">
             <div className="email-content">
-                <strong>{name}</strong>
+                <strong>{from}</strong>
                 <p>Subject: {subject}</p>
             </div>
-            <div className="email-actions">
-            </div>
+            <div className="email-actions"></div>
         </div>
     );
 };
 
-function EmailComponent() {
-    const [email, setEmail] = useState(null);
-
-    useEffect(() => {
-        const fetchAndSetEmail = async () => {
-            const fetchedEmail = (await fetchEmailData()).email
-            setEmail(fetchedEmail);
-        };
-        fetchAndSetEmail();
-    }, []);
-
+function EmailComponent({ email }: { email: string | null }) {
     return (
-    <div className="email-container">
-        <p className="placeholder">{email ? email : "email is not"}</p>
-    </div>
-);
+        <div className="email-container">
+            <p className="placeholder">{email ? email : "Email is not available"}</p>
+        </div>
+    );
 }
 
 async function fetchEmailData() {
@@ -131,7 +134,7 @@ async function fetchEmailData() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        return response.json()
+        return response.json();
     } catch (error) {
         console.error("Failed to fetch email data:", error);
     }
