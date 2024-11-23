@@ -3,9 +3,36 @@ import { Link } from 'react-router-dom';
 import './Inbox.css';
 import shield from "../../images/shield.png";
 import { backendUrl } from "../../utils/config";
+import OpenedEmail from "../openedemail/OpenedEmail";
 
 const Inbox: React.FC = () => {
     const [email, setEmail] = useState<string | null>(null);
+    const [openedEmail, setOpenedEmail] = useState<OpenedEmailData | null>(null);
+
+    const handleOpenEmail = async (emailAddress: string, date: Date) => {
+        emailAddress = '5a7d7a1e-6@domain.com'
+        try {
+            const response = await fetch(`${backendUrl}/api/email?email=${emailAddress}&date=${new Date(date).getTime()}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch email: ${response.statusText}`);
+            }
+
+            const emailData: OpenedEmailData = await response.json();
+            setOpenedEmail(emailData);
+        } catch (error) {
+            console.error("Failed to open email:", error);
+        }
+    };
+
+    const handleCloseEmail = () => {
+        setOpenedEmail(null);
+    };
 
     useEffect(() => {
         const fetchAndSetEmail = async () => {
@@ -40,26 +67,32 @@ const Inbox: React.FC = () => {
             </aside>
 
             <main className="main">
-                <div className="header">
-                    <h2>Inbox</h2>
-                    <EmailComponent email={email} />
-                    <button className="refresh-btn">Refresh</button>
-                </div>
-                <div className="email-list">
-                    <EmailList email={email} />
-                </div>
+                {openedEmail ? (
+                    <OpenedEmail email={openedEmail} onClose={handleCloseEmail} />
+                ) : (
+                    <>
+                        <div className="header">
+                            <h2>Inbox</h2>
+                            <EmailComponent email={email} />
+                            <button className="refresh-btn">Refresh</button>
+                        </div>
+                        <div className="email-list">
+                            <EmailList email={email} onOpen={handleOpenEmail} />
+                        </div>
+                    </>
+                )}
             </main>
         </div>
     );
 };
 
-const EmailList: React.FC<{ email: string | null }> = ({ email }) => {
+const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string, date: Date) => void }> = ({ email, onOpen }) => {
     const [emails, setEmails] = useState<EmailItemProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!email) return; // Don't fetch if email is null
+        if (!email) return;
 
         const fetchEmails = async () => {
             try {
@@ -86,7 +119,14 @@ const EmailList: React.FC<{ email: string | null }> = ({ email }) => {
         <div className="email-list">
             {emails.length > 0 ? (
                 emails.map((email, index) => (
-                    <EmailItem key={index} from={email.from} subject={email.subject} />
+                    <EmailItem
+                        key={index}
+                        from={email.from}
+                        to={email.to}
+                        subject={email.subject}
+                        date={email.date}
+                        onOpen={() => onOpen(email.to, email.date)}
+                    />
                 ))
             ) : (
                 <div>Don't be shy, receive an email</div>
@@ -97,17 +137,19 @@ const EmailList: React.FC<{ email: string | null }> = ({ email }) => {
 
 interface EmailItemProps {
     from: string;
+    to: string;
     subject: string;
+    date: Date;
 }
 
-const EmailItem: React.FC<EmailItemProps> = ({ from, subject }) => {
+const EmailItem: React.FC<EmailItemProps & { onOpen: () => void }> = ({ from, subject, date, onOpen }) => {
     return (
-        <div className="email-item">
+        <div className="email-item" onClick={onOpen}>
             <div className="email-content">
                 <strong>{from}</strong>
                 <p>Subject: {subject}</p>
+                <p>{new Date(date).toLocaleString()}</p>
             </div>
-            <div className="email-actions"></div>
         </div>
     );
 };
@@ -118,6 +160,22 @@ function EmailComponent({ email }: { email: string | null }) {
             <p className="placeholder">{email ? email : "Email is not available"}</p>
         </div>
     );
+}
+
+interface OpenedEmailData {
+    from: string;
+    to: string;
+    subject: string;
+    textBody: string;
+    htmlBody: string;
+    attachments: EmailAttachment[];
+}
+
+interface EmailAttachment {
+    filename: string;
+    contentType: string;
+    size: number;
+    content: string;
 }
 
 async function fetchEmailData() {
