@@ -47,7 +47,7 @@ const Inbox: React.FC = () => {
             <aside className="sidebar">
                 <Link to="/" className="logo">
                     <div className="logo-icon"> {<img src={shield} alt="Shield" />} </div>
-                    <span className="logo-text">SafeMail</span>
+                    <span className="logo-text">DumpMail</span>
                 </Link>
                 <Link to="/" className="nav-link">Back to Home</Link>
                 <div className="folders">

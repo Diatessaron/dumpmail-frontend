@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
             <header className="header">
                 <div className="logo">
                     <div className="logo-icon"> {<img src={shield} alt="Shield"/>} </div>
-                    <span className="logo-text">SafeMail</span>
+                    <span className="logo-text">DumpMail</span>
                 </div>
                 <div className="privacy-text">Your Privacy, Our Priority</div>
             </header>
@@ -40,8 +40,7 @@ const HomePage: React.FC = () => {
             </main>
 
             <footer className="footer">
-                <p>Contact us at: support@safemail.com</p>
-                <p>About SafeMail: Your number one choice for disposable email addresses</p>
+                <p>About DumpMail: Your number one choice for disposable email addresses</p>
             </footer>
         </div>
     );
