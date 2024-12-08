@@ -6,19 +6,56 @@
 
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
 }
 
 .container {
     display: flex;
     height: 100vh;
-    color: #333;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 10px 20px;
+}
+
+.menu-toggle,
+.close-sidebar {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    bottom: 0;
     width: 250px;
     background-color: #f5f5f5;
+    transition: 0.3s;
     padding: 20px;
-    border-right: 1px solid #ddd;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
 }
 
 .folders, .filters {
@@ -40,49 +77,36 @@ body {
     cursor: pointer;
 }
 
-.main {
-    flex: 1;
-    padding: 20px;
-    background-color: #fff;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
 .refresh-btn {
-    padding: 8px 16px;
-    font-size: 14px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
     cursor: pointer;
-    border: 1px solid #d3d3d3; /* Light gray border */
-    background-color: #fff; /* White background */
-    color: #6c757d; /* Gray text color */
-    border-radius: 20px; /* Rounded corners for pill shape */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for soft effect */
-    outline: none; /* Remove blue outline on focus */
 }
 
 .refresh-btn:focus {
-    outline: none; /* Optional: Remove default blue outline on focus */
+    outline: none;
 }
 
 .email-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
 }
 
 .email-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 15px;
-    background-color: #f8f9fa;
+    background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.email-item:hover {
+    transform: scale(1.02);
 }
 
 .email-content p {
@@ -127,8 +151,10 @@ body {
 
     .sidebar {
         width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
+    }
+
+    .email-list {
+        grid-template-columns: 1fr;
     }
 
     .main {
@@ -147,13 +173,6 @@ body {
 
 .nav-link:hover {
     text-decoration: underline;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
 }
 
 .logo-icon {
