@@ -8,20 +8,16 @@ import OpenedEmail from "../openedemail/OpenedEmail";
 const Inbox: React.FC = () => {
     const [email, setEmail] = useState<string | null>(null);
     const [openedEmail, setOpenedEmail] = useState<OpenedEmailData | null>(null);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
     const handleOpenEmail = async (emailAddress: string, date: Date) => {
-        emailAddress = "5a7d7a1e-6@domain.com";
+        emailAddress = '5a7d7a1e-6@domain.com'
         try {
-            const response = await fetch(
-                `${backendUrl}/api/email?email=${emailAddress}&date=${date.getTime()}`,
-                {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
+            const response = await fetch(`${backendUrl}/api/email?email=${emailAddress}&date=${new Date(date).getTime()}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch email: ${response.statusText}`);
@@ -34,29 +30,25 @@ const Inbox: React.FC = () => {
         }
     };
 
-    const handleCloseEmail = () => setOpenedEmail(null);
+    const handleCloseEmail = () => {
+        setOpenedEmail(null);
+    };
 
     useEffect(() => {
-        const fetchEmail = async () => {
+        const fetchAndSetEmail = async () => {
             const fetchedEmail = (await fetchEmailData())?.email;
             setEmail(fetchedEmail);
         };
-        fetchEmail();
+        fetchAndSetEmail();
     }, []);
 
     return (
         <div className="container">
-            <header className="header">
-                <button className="menu-toggle" onClick={toggleSidebar}>☰</button>
-                <div className="logo">
-                    <img src={shield} alt="Shield" />
-                    <span>DumpMail</span>
-                </div>
-                <button className="refresh-btn">Refresh</button>
-            </header>
-
-            <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-                <button className="close-sidebar" onClick={toggleSidebar}>×</button>
+            <aside className="sidebar">
+                <Link to="/" className="logo">
+                    <div className="logo-icon"> {<img src={shield} alt="Shield" />} </div>
+                    <span className="logo-text">DumpMail</span>
+                </Link>
                 <Link to="/" className="nav-link">Back to Home</Link>
                 <div className="folders">
                     <h3>Folders</h3>
@@ -78,9 +70,16 @@ const Inbox: React.FC = () => {
                 {openedEmail ? (
                     <OpenedEmail email={openedEmail} onClose={handleCloseEmail} />
                 ) : (
-                    <div className="email-list">
-                        <EmailList email={email} onOpen={handleOpenEmail} />
-                    </div>
+                    <>
+                        <div className="header">
+                            <h2>Inbox</h2>
+                            <EmailComponent email={email} />
+                            <button className="refresh-btn">Refresh</button>
+                        </div>
+                        <div className="email-list">
+                            <EmailList email={email} onOpen={handleOpenEmail} />
+                        </div>
+                    </>
                 )}
             </main>
         </div>
