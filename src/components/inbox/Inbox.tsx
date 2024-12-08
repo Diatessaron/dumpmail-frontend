@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Inbox.css';
 import shield from "../../images/shield.png";
-import {backendUrl} from "../../utils/config";
+import { backendUrl } from "../../utils/config";
 import OpenedEmail from "../openedemail/OpenedEmail";
 
 const Inbox: React.FC = () => {
@@ -19,7 +19,7 @@ const Inbox: React.FC = () => {
                 `${backendUrl}/api/email?email=${emailAddress}&date=${date.getTime()}`,
                 {
                     method: "GET",
-                    headers: {"Content-Type": "application/json"},
+                    headers: { "Content-Type": "application/json" },
                 }
             );
 
@@ -49,7 +49,7 @@ const Inbox: React.FC = () => {
             <header className="header">
                 <button className="menu-toggle" onClick={toggleSidebar}>☰</button>
                 <div className="logo">
-                    <img src={shield} alt="Shield"/>
+                    <img src={shield} alt="Shield" />
                     <span>DumpMail</span>
                 </div>
                 <button className="refresh-btn">Refresh</button>
@@ -76,28 +76,18 @@ const Inbox: React.FC = () => {
 
             <main className="main">
                 {openedEmail ? (
-                    <OpenedEmail email={openedEmail} onClose={handleCloseEmail}/>
+                    <OpenedEmail email={openedEmail} onClose={handleCloseEmail} />
                 ) : (
-                    <>
-                        <div className="header">
-                            <h2>Inbox</h2>
-                            <EmailComponent email={email}/>
-                            <button className="refresh-btn">Refresh</button>
-                        </div>
-                        <div className="email-list">
-                            <EmailList email={email} onOpen={handleOpenEmail}/>
-                        </div>
-                    </>
+                    <div className="email-list">
+                        <EmailList email={email} onOpen={handleOpenEmail} />
+                    </div>
                 )}
             </main>
         </div>
     );
 };
 
-const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string, date: Date) => void }> = ({
-                                                                                                               email,
-                                                                                                               onOpen
-                                                                                                           }) => {
+const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string, date: Date) => void }> = ({ email, onOpen }) => {
     const [emails, setEmails] = useState<EmailItemProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -153,7 +143,7 @@ interface EmailItemProps {
     date: Date;
 }
 
-const EmailItem: React.FC<EmailItemProps & { onOpen: () => void }> = ({from, subject, date, onOpen}) => {
+const EmailItem: React.FC<EmailItemProps & { onOpen: () => void }> = ({ from, subject, date, onOpen }) => {
     return (
         <div className="email-item" onClick={onOpen}>
             <div className="email-content">
@@ -165,7 +155,7 @@ const EmailItem: React.FC<EmailItemProps & { onOpen: () => void }> = ({from, sub
     );
 };
 
-function EmailComponent({email}: { email: string | null }) {
+function EmailComponent({ email }: { email: string | null }) {
     return (
         <div className="email-container">
             <p className="placeholder">{email ? email : "Email is not available"}</p>
