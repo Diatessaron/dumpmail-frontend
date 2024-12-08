@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.f053155e.css",
-    "main.js": "/static/js/main.d88b57f0.js",
-    "static/js/453.e0f38078.chunk.js": "/static/js/453.e0f38078.chunk.js",
-    "static/media/Envelop.png": "/static/media/Envelop.1ad13363b1893e1a37b0.png",
-    "static/media/person_with_shield.png": "/static/media/person_with_shield.1c22353e3e08f9c50a5e.png",
-    "static/media/shield.png": "/static/media/shield.eba51cb9b8dee4df9a53.png",
-    "index.html": "/index.html",
-    "main.f053155e.css.map": "/static/css/main.f053155e.css.map",
-    "main.d88b57f0.js.map": "/static/js/main.d88b57f0.js.map",
-    "453.e0f38078.chunk.js.map": "/static/js/453.e0f38078.chunk.js.map"
+    "main.css": "/dumpmail-frontend/static/css/main.f053155e.css",
+    "main.js": "/dumpmail-frontend/static/js/main.1af84d4e.js",
+    "static/js/453.e0f38078.chunk.js": "/dumpmail-frontend/static/js/453.e0f38078.chunk.js",
+    "static/media/Envelop.png": "/dumpmail-frontend/static/media/Envelop.1ad13363b1893e1a37b0.png",
+    "static/media/person_with_shield.png": "/dumpmail-frontend/static/media/person_with_shield.1c22353e3e08f9c50a5e.png",
+    "static/media/shield.png": "/dumpmail-frontend/static/media/shield.eba51cb9b8dee4df9a53.png",
+    "index.html": "/dumpmail-frontend/index.html",
+    "main.f053155e.css.map": "/dumpmail-frontend/static/css/main.f053155e.css.map",
+    "main.1af84d4e.js.map": "/dumpmail-frontend/static/js/main.1af84d4e.js.map",
+    "453.e0f38078.chunk.js.map": "/dumpmail-frontend/static/js/453.e0f38078.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f053155e.css",
-    "static/js/main.d88b57f0.js"
+    "static/js/main.1af84d4e.js"
   ]
 }
