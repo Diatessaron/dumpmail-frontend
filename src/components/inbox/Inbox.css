@@ -19,8 +19,16 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f4f4f4;
+    margin-bottom: 20px;
     padding: 10px 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+}
+
+.header h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
 }
 
 .menu-toggle,
@@ -78,12 +86,19 @@ body {
 }
 
 .refresh-btn {
-    padding: 8px 12px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #d3d3d3;
+    background-color: #fff;
+    color: #007bff;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.refresh-btn:hover {
     background-color: #007bff;
     color: #fff;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
 }
 
 .refresh-btn:focus {
@@ -165,6 +180,11 @@ body {
         font-size: 20px;
     }
 
+    .refresh-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
     .email-item {
         flex-direction: column;
         align-items: flex-start;
@@ -188,19 +208,65 @@ body {
 }
 
 @media (max-width: 480px) {
-    .sidebar {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
         padding: 10px;
-    }
-
-    .folders h3, .filters h3 {
-        font-size: 16px;
     }
 
     .header h2 {
         font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .refresh-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+        align-self: flex-end;
+    }
+
+    .sidebar {
+        position: absolute;
+        width: 100%;
+        left: -100%;
+        transition: left 0.3s ease;
+        z-index: 100;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .close-sidebar {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .email-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
     .email-item {
         padding: 10px;
+        font-size: 14px;
+    }
+
+    .email-content p {
+        font-size: 12px;
+    }
+
+    .logo {
+        font-size: 16px;
+    }
+
+    .logo-icon img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .nav-link {
+        font-size: 12px;
     }
 }
