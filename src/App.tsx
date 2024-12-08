@@ -5,7 +5,7 @@ import Inbox from './components/inbox/Inbox';
 
 const App: React.FC = () => {
   return (
-      <Router>
+      <Router basename="/dumpmail-frontend">
         <div className="App">
           <Routes>
             <Route path="/" element={<HomePage />} />
