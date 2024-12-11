@@ -36,7 +36,7 @@ const Inbox: React.FC = () => {
 
     useEffect(() => {
         const fetchAndSetEmail = async () => {
-            const fetchedEmail = (await fetchEmailData())?.email;
+            const fetchedEmail = await fetchEmailData();
             setEmail(fetchedEmail);
         };
         fetchAndSetEmail();
@@ -178,23 +178,30 @@ interface EmailAttachment {
     content: string;
 }
 
-async function fetchEmailData() {
+async function fetchEmailData(): Promise<string | null> {
     try {
+        const jwtToken = localStorage.getItem('jwtToken');
         const response = await fetch(`${backendUrl}/api/email`, {
             method: 'POST',
             credentials: "include",
-            headers: {
+            headers: jwtToken ? {
                 'Content-Type': 'application/json',
-            },
+                'Authorization': jwtToken
+            } : {'Content-Type': 'application/json'},
         });
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        return response.json();
+        const [ email, authorization ] = [ (await response.json())?.email, response.headers.get('Authorization') ];
+        if (!email || !authorization) throw new Error("email or Authorization token is null")
+
+        localStorage.setItem('jwtToken', authorization);
+        return email;
     } catch (error) {
         console.error("Failed to fetch email data:", error);
+        return null;
     }
 }
 
