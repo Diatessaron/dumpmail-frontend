@@ -10,7 +10,6 @@ const Inbox: React.FC = () => {
     const [openedEmail, setOpenedEmail] = useState<OpenedEmailData | null>(null);
 
     const handleOpenEmail = async (emailAddress: string, date: Date) => {
-        emailAddress = '5a7d7a1e-6@domain.com'
         try {
             const response = await fetch(`${backendUrl}/api/email?email=${emailAddress}&date=${new Date(date).getTime()}`, {
                 method: 'GET',
