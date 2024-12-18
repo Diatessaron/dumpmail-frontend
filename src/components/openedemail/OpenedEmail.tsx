@@ -44,7 +44,7 @@ const OpenedEmail: React.FC<OpenedEmailProps> = ({ email, onClose }) => {
                             dangerouslySetInnerHTML={{ __html: email.text }}
                         ></div>
                     </>
-                ) : ("No text body available")}
+                ) : (<p>{email.text || "No text body available"}</p>)}
             </div>
             {email.attachments.length > 0 && (
                 <div className="email-attachments">
