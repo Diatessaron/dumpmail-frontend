@@ -10,8 +10,7 @@ interface OpenedEmailData {
     from: string;
     to: string;
     subject: string;
-    textBody: string;
-    htmlBody: string;
+    text: string;
     attachments: EmailAttachment[];
 }
 
@@ -38,15 +37,14 @@ const OpenedEmail: React.FC<OpenedEmailProps> = ({ email, onClose }) => {
                 <p><strong>To:</strong> {email.to}</p>
             </div>
             <div className="email-body">
-                <p>{email.textBody || "No text body available"}</p>
-                {email.htmlBody && (
+                {(email.text && isHtml(email.text)) ? (
                     <>
                         <div
                             className="html-body"
-                            dangerouslySetInnerHTML={{ __html: email.htmlBody }}
+                            dangerouslySetInnerHTML={{ __html: email.text }}
                         ></div>
                     </>
-                )}
+                ) : ("No text body available")}
             </div>
             {email.attachments.length > 0 && (
                 <div className="email-attachments">
@@ -65,5 +63,10 @@ const OpenedEmail: React.FC<OpenedEmailProps> = ({ email, onClose }) => {
         </div>
     );
 };
+
+function isHtml(content: string): boolean {
+    const htmlRegex = /<\/?[a-z][\s\S]*>/i; // Basic regex to check for HTML tags
+    return htmlRegex.test(content);
+}
 
 export default OpenedEmail;
