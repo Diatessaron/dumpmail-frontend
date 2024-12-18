@@ -165,8 +165,7 @@ interface OpenedEmailData {
     from: string;
     to: string;
     subject: string;
-    textBody: string;
-    htmlBody: string;
+    text: string;
     attachments: EmailAttachment[];
 }
 
