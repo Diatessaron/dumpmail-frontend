@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/dumpmail-frontend/static/css/main.f053155e.css",
-    "main.js": "/dumpmail-frontend/static/js/main.37a1d6ca.js",
+    "main.js": "/dumpmail-frontend/static/js/main.63afdeb7.js",
     "static/js/453.e0f38078.chunk.js": "/dumpmail-frontend/static/js/453.e0f38078.chunk.js",
     "static/media/Envelop.png": "/dumpmail-frontend/static/media/Envelop.1ad13363b1893e1a37b0.png",
     "static/media/person_with_shield.png": "/dumpmail-frontend/static/media/person_with_shield.1c22353e3e08f9c50a5e.png",
     "static/media/shield.png": "/dumpmail-frontend/static/media/shield.eba51cb9b8dee4df9a53.png",
     "index.html": "/dumpmail-frontend/index.html",
     "main.f053155e.css.map": "/dumpmail-frontend/static/css/main.f053155e.css.map",
-    "main.37a1d6ca.js.map": "/dumpmail-frontend/static/js/main.37a1d6ca.js.map",
+    "main.63afdeb7.js.map": "/dumpmail-frontend/static/js/main.63afdeb7.js.map",
     "453.e0f38078.chunk.js.map": "/dumpmail-frontend/static/js/453.e0f38078.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f053155e.css",
-    "static/js/main.37a1d6ca.js"
+    "static/js/main.63afdeb7.js"
   ]
 }
