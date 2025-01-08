@@ -175,7 +175,7 @@ const EmailItem: React.FC<EmailItemProps & { onOpen: () => void }> = ({ from, su
 function EmailComponent({ email }: { email: string | null }) {
     return (
         <div className="email-container">
-            <p className="placeholder">{email ? email : "Email is not available"}</p>
+            <p className="placeholder">{email ? email : "Email is loading"}</p>
         </div>
     );
 }
