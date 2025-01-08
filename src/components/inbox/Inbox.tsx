@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import './Inbox.css';
 import shield from "../../images/shield.png";
-import { backendUrl } from "../../utils/config";
+import {backendUrl} from "../../utils/config";
 import OpenedEmail from "../openedemail/OpenedEmail";
 
 const Inbox: React.FC = () => {
     const [email, setEmail] = useState<string | null>(null);
     const [openedEmail, setOpenedEmail] = useState<OpenedEmailData | null>(null);
+    const [copied, setCopied] = useState(false);
 
     const handleOpenEmail = async (emailAddress: string, date: Date) => {
         try {
@@ -39,7 +40,11 @@ const Inbox: React.FC = () => {
             return;
         }
 
-        navigator.clipboard.writeText(email)
+        navigator.clipboard.writeText(email).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        })
+            .catch((err) => console.error("Failed to copy:", err));
     };
 
     useEffect(() => {
@@ -54,7 +59,7 @@ const Inbox: React.FC = () => {
         <div className="container">
             <aside className="sidebar">
                 <Link to="/" className="logo">
-                    <div className="logo-icon"> {<img src={shield} alt="Shield" />} </div>
+                    <div className="logo-icon"> {<img src={shield} alt="Shield"/>} </div>
                     <span className="logo-text">DumpMail</span>
                 </Link>
                 <Link to="/" className="nav-link">Back to Home</Link>
@@ -76,13 +81,16 @@ const Inbox: React.FC = () => {
 
             <main className="main">
                 {openedEmail ? (
-                    <OpenedEmail email={openedEmail} onClose={handleCloseEmail} />
+                    <OpenedEmail email={openedEmail} onClose={handleCloseEmail}/>
                 ) : (
                     <>
                         <div className="header">
                             <h2>Inbox</h2>
-                            <EmailComponent email={email} />
+                            <EmailComponent email={email}/>
                             <button className="copy-btn" onClick={() => handleCopyEmail(email)}>📄</button>
+                            <div className={`copy-notification ${copied ? "show" : ""}`}>
+                                Email copied to clipboard!
+                            </div>
                         </div>
                         <div className="email-list">
                             <EmailList email={email} onOpen={handleOpenEmail}/>
@@ -94,7 +102,10 @@ const Inbox: React.FC = () => {
     );
 };
 
-const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string, date: Date) => void }> = ({ email, onOpen }) => {
+const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string, date: Date) => void }> = ({
+                                                                                                               email,
+                                                                                                               onOpen
+                                                                                                           }) => {
     const [emails, setEmails] = useState<EmailItemProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -160,7 +171,7 @@ interface EmailItemProps {
     date: Date;
 }
 
-const EmailItem: React.FC<EmailItemProps & { onOpen: () => void }> = ({ from, subject, date, onOpen }) => {
+const EmailItem: React.FC<EmailItemProps & { onOpen: () => void }> = ({from, subject, date, onOpen}) => {
     return (
         <div className="email-item" onClick={onOpen}>
             <div className="email-content">
@@ -172,7 +183,7 @@ const EmailItem: React.FC<EmailItemProps & { onOpen: () => void }> = ({ from, su
     );
 };
 
-function EmailComponent({ email }: { email: string | null }) {
+function EmailComponent({email}: { email: string | null }) {
     return (
         <div className="email-container">
             <p className="placeholder">{email ? email : "Email is loading"}</p>
@@ -211,7 +222,7 @@ async function fetchEmailData(): Promise<string | null> {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const [ email, authorization ] = [ (await response.json())?.email, response.headers.get('Authorization') ];
+        const [email, authorization] = [(await response.json())?.email, response.headers.get('Authorization')];
         if (!email || !authorization) throw new Error("email or Authorization token is null")
 
         localStorage.setItem('jwtToken', authorization);
