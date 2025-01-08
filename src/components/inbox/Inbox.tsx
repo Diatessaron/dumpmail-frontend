@@ -99,25 +99,25 @@ const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string,
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchEmails = async () => {
-        if (!email) return;
-
-        try {
-            const response = await fetch(`${backendUrl}/api/email/all?email=${email}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch emails');
-            }
-            const data: EmailItemProps[] = await response.json();
-            setEmails(data);
-        } catch (error: any) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
         if (!email) return;
+
+        const fetchEmails = async () => {
+            if (!email) return;
+
+            try {
+                const response = await fetch(`${backendUrl}/api/email/all?email=${email}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch emails');
+                }
+                const data: EmailItemProps[] = await response.json();
+                setEmails(data);
+            } catch (error: any) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
         fetchEmails();
 
