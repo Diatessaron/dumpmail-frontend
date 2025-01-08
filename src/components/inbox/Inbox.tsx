@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Inbox.css';
 import shield from "../../images/shield.png";
@@ -94,7 +94,7 @@ const Inbox: React.FC = () => {
     );
 };
 
-const EmailList = forwardRef(({ email, onOpen }: { email: string | null; onOpen: (emailAddress: string, date: Date) => void }, ref) => {
+const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string, date: Date) => void }> = ({ email, onOpen }) => {
     const [emails, setEmails] = useState<EmailItemProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -115,10 +115,6 @@ const EmailList = forwardRef(({ email, onOpen }: { email: string | null; onOpen:
             setLoading(false);
         }
     };
-
-    useImperativeHandle(ref, () => ({
-        refreshEmails: fetchEmails,
-    }));
 
     useEffect(() => {
         if (!email) return;
@@ -155,7 +151,7 @@ const EmailList = forwardRef(({ email, onOpen }: { email: string | null; onOpen:
             )}
         </div>
     );
-});
+};
 
 interface EmailItemProps {
     from: string;
