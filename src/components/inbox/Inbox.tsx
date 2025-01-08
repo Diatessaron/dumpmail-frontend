@@ -88,9 +88,9 @@ const Inbox: React.FC = () => {
                             <h2>Inbox</h2>
                             <EmailComponent email={email}/>
                             <button className="copy-btn" onClick={() => handleCopyEmail(email)}>📄</button>
-                            <div className={`copy-notification ${copied ? "show" : ""}`}>
-                                Email copied to clipboard!
-                            </div>
+                            <>
+                                {copied && <div className="copy-notification">Email copied!</div>}
+                            </>
                         </div>
                         <div className="email-list">
                             <EmailList email={email} onOpen={handleOpenEmail}/>

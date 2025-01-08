@@ -20,12 +20,14 @@ body {
     font-size: 14px;
     font-weight: bold;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    animation: fadeInOut 2s ease-in-out;
 }
 
-.copy-notification.show {
-    opacity: 1;
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    10% { opacity: 0.9; transform: translateX(-50%) translateY(0px); }
+    90% { opacity: 0.9; transform: translateX(-50%) translateY(0px); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
 }
 
 .container {
