@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Inbox.css';
 import shield from "../../images/shield.png";
@@ -8,6 +8,7 @@ import OpenedEmail from "../openedemail/OpenedEmail";
 const Inbox: React.FC = () => {
     const [email, setEmail] = useState<string | null>(null);
     const [openedEmail, setOpenedEmail] = useState<OpenedEmailData | null>(null);
+    const emailListRef = useRef<{ refreshEmails: () => void } | null>(null);
 
     const handleOpenEmail = async (emailAddress: string, date: Date) => {
         try {
@@ -31,6 +32,12 @@ const Inbox: React.FC = () => {
 
     const handleCloseEmail = () => {
         setOpenedEmail(null);
+    };
+
+    const handleRefreshEmails = () => {
+        if (emailListRef.current) {
+            emailListRef.current.refreshEmails();
+        }
     };
 
     useEffect(() => {
@@ -73,7 +80,9 @@ const Inbox: React.FC = () => {
                         <div className="header">
                             <h2>Inbox</h2>
                             <EmailComponent email={email} />
-                            <button className="refresh-btn">Refresh</button>
+                            <button className="refresh-btn" onClick={handleRefreshEmails}>
+                                Refresh
+                            </button>
                         </div>
                         <div className="email-list">
                             <EmailList email={email} onOpen={handleOpenEmail} />
@@ -85,30 +94,44 @@ const Inbox: React.FC = () => {
     );
 };
 
-const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string, date: Date) => void }> = ({ email, onOpen }) => {
+const EmailList = forwardRef(({ email, onOpen }: { email: string | null; onOpen: (emailAddress: string, date: Date) => void }, ref) => {
     const [emails, setEmails] = useState<EmailItemProps[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const fetchEmails = async () => {
+        if (!email) return;
+
+        try {
+            const response = await fetch(`${backendUrl}/api/email/all?email=${email}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch emails');
+            }
+            const data: EmailItemProps[] = await response.json();
+            setEmails(data);
+        } catch (error: any) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useImperativeHandle(ref, () => ({
+        refreshEmails: fetchEmails,
+    }));
+
     useEffect(() => {
         if (!email) return;
 
-        const fetchEmails = async () => {
-            try {
-                const response = await fetch(`${backendUrl}/api/email/all?email=${email}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch emails');
-                }
-                const data: EmailItemProps[] = await response.json();
-                setEmails(data);
-            } catch (error: any) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchEmails();
+
+        const intervalId = setInterval(() => {
+            fetchEmails();
+        }, 10000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [email]);
 
     if (loading) return <div>Loading emails...</div>;
@@ -132,7 +155,7 @@ const EmailList: React.FC<{ email: string | null; onOpen: (emailAddress: string,
             )}
         </div>
     );
-};
+});
 
 interface EmailItemProps {
     from: string;
