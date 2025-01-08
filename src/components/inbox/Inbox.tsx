@@ -8,7 +8,6 @@ import OpenedEmail from "../openedemail/OpenedEmail";
 const Inbox: React.FC = () => {
     const [email, setEmail] = useState<string | null>(null);
     const [openedEmail, setOpenedEmail] = useState<OpenedEmailData | null>(null);
-    const emailListRef = useRef<{ refreshEmails: () => void } | null>(null);
 
     const handleOpenEmail = async (emailAddress: string, date: Date) => {
         try {
@@ -34,10 +33,13 @@ const Inbox: React.FC = () => {
         setOpenedEmail(null);
     };
 
-    const handleRefreshEmails = () => {
-        if (emailListRef.current) {
-            emailListRef.current.refreshEmails();
+    const handleCopyEmail = (email: string | null) => {
+        if (!email) {
+            console.error("No email to copy!");
+            return;
         }
+
+        navigator.clipboard.writeText(email)
     };
 
     useEffect(() => {
@@ -80,12 +82,10 @@ const Inbox: React.FC = () => {
                         <div className="header">
                             <h2>Inbox</h2>
                             <EmailComponent email={email} />
-                            <button className="refresh-btn" onClick={handleRefreshEmails}>
-                                Refresh
-                            </button>
+                            <button className="copy-btn" onClick={() => handleCopyEmail(email)}>📄</button>
                         </div>
                         <div className="email-list">
-                            <EmailList email={email} onOpen={handleOpenEmail} />
+                            <EmailList email={email} onOpen={handleOpenEmail}/>
                         </div>
                     </>
                 )}

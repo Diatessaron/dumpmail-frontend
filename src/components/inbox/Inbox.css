@@ -53,20 +53,20 @@ body {
     margin-bottom: 20px;
 }
 
-.refresh-btn {
+.copy-btn {
     padding: 8px 16px;
     font-size: 14px;
     cursor: pointer;
-    border: 1px solid #d3d3d3; /* Light gray border */
-    background-color: #fff; /* White background */
-    color: #6c757d; /* Gray text color */
-    border-radius: 20px; /* Rounded corners for pill shape */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for soft effect */
-    outline: none; /* Remove blue outline on focus */
+    border: 1px solid #d3d3d3;
+    background-color: #fff;
+    color: #6c757d;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    outline: none;
 }
 
-.refresh-btn:focus {
-    outline: none; /* Optional: Remove default blue outline on focus */
+.copy-btn:focus {
+    outline: none;
 }
 
 .email-list {
