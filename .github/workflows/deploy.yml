@@ -20,6 +20,9 @@ jobs:
           npm ci
           npm run build
 
+      - name: Install Sentry CLI
+        run: npm install -g @sentry/cli
+
       - name: Inject Sentry Release Info
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
