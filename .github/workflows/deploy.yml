@@ -10,12 +10,26 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+
       - name: Install dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: |
           echo "REACT_APP_BACKEND=${{ secrets.REACT_APP_BACKEND }}" >> .env
           npm ci
           npm run build
+
+      - name: Inject Sentry Release Info
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: |
+          sentry-cli sourcemaps inject --org rbi-group --project javascript-react build
+
+      - name: Upload Source Maps to Sentry
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: |
+          sentry-cli sourcemaps upload --org rbi-group --project javascript-react build
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
