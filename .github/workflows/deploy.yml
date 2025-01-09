@@ -11,8 +11,14 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Install Sentry CLI
-        run: npm install -g @sentry/cli
+      - name: Install dependencies
+        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: |
+          echo "REACT_APP_BACKEND=${{ secrets.REACT_APP_BACKEND }}" >> .env
+          npm ci
+          npm run build
 
       - name: Inject Sentry Release Info
         env:
@@ -25,13 +31,6 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: |
           sentry-cli sourcemaps upload --org rbi-group --project javascript-react build
-
-      - name: Install dependencies
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: |
-          echo "REACT_APP_BACKEND=${{ secrets.REACT_APP_BACKEND }}" >> .env
-          npm ci
-          npm run build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
